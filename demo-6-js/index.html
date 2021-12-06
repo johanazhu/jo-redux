@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div id="count">1</div>
+        <button id="btn">add</button>
+    </div>
+    <script type="module">
+        import { createStore } from './redux/index.js';
+
+        const initState = {
+            count: 0
+        }
+
+        const reducer = (state, action) => {
+            switch (action.type) {
+                case 'INCREMENT':
+                    return {
+                        ...state,
+                        count: state.count + 1
+                    }
+                case 'DECREMENT':
+                    return {
+                        ...state,
+                        count: state.count - 1
+                    }
+                default:
+                    return state
+            }
+        }
+
+        const store = createStore(reducer, initState)
+
+        let count = document.getElementById('count')
+        let add = document.getElementById("btn")
+        add.onclick = function () {
+            store.dispatch({
+                type: 'INCREMENT'
+            })
+        }
+        // 渲染视图
+        function render() {
+            count.innerHTML = store.getState().count
+        }
+        render()
+        // 监听数据
+        store.subscribe(() => {
+            let state = store.getState();
+            console.log('state', state)
+            render()
+        });
+    </script>
+</body>
+
+</html>
